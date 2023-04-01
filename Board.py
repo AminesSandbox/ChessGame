@@ -1,4 +1,5 @@
 import pygame
+from testfile import Pawn
 
 #CONSTANTS
 CHESSGREEN = [155,205,155]
@@ -8,22 +9,11 @@ CHESSGRAY = [128,128,128]
 CHESSCYAN = [0,238,238]
 BLACK = [0,0,0]
 
-#CLASSES
-class Pawn:
-    def __init__(self,x,y, col):
-        self.x = 160+ x *180
-        self.y = 160+ y *180
-        self.col = col
-
-    def draw(self):
-        colour(self.col,self.x,self.y,50)
-    
-
-#METHODS
+#DRAWING METHODS
 def drawSquare (c,x,y,w,o):
     pygame.draw.rect(screen,c,(x,y,w,w),o)
 
-def colour (colour,x,y,r):
+def drawCirc (colour,x,y,r):
     pygame.draw.circle(screen,colour,(x,y),r)
 
 def drawBoard(): 
@@ -42,7 +32,6 @@ def drawBoard():
 
 #MAIN SCRIPT
 pygame.init() # initialize game
-a = Pawn(0,0,CHESSCYAN)
 
 screen = pygame.display.set_mode((1280, 960)) #setting length and width
 clock = pygame.time.Clock()
@@ -51,7 +40,7 @@ running = True
 rows, cols = (5, 5)
 boardMatrix = [[0] * cols] * rows
 
-screen.fill(CHESSBROWN)
+pawn1 = Pawn(00,00,CHESSCYAN)
 
 while running:
     # poll for events
@@ -62,8 +51,12 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     
-    # RENDER YOUR GAME HERE
+    screen.fill(CHESSBROWN)
     drawBoard()
+
+    # RENDER YOUR GAME HERE
+    drawCirc(CHESSCYAN,pawn1.getCoords()[0],pawn1.getCoords()[1],10)
+    
     # flip() the display to put your work on screen
     pygame.display.flip()
 
