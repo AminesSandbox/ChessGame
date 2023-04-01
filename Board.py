@@ -42,7 +42,6 @@ def drawBoard():
 
 #MAIN SCRIPT
 pygame.init() # initialize game
-a = Pawn(0,0,CHESSCYAN)
 
 screen = pygame.display.set_mode((1280, 960)) #setting length and width
 clock = pygame.time.Clock()
@@ -52,6 +51,9 @@ rows, cols = (5, 5)
 boardMatrix = [[0] * cols] * rows
 
 screen.fill(CHESSBROWN)
+
+a = Pawn(0,0,CHESSCYAN)
+a.draw()
 
 while running:
     # poll for events
