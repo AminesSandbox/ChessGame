@@ -42,9 +42,6 @@ boardMatrix = [[0] * cols] * rows
 
 pawn1 = Pawn(00,00,CHESSCYAN)
 
-a = Pawn(0,0,CHESSCYAN)
-a.draw()
-
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
