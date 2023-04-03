@@ -2,9 +2,15 @@ import pygame
 
 #CLASSES
 class Piece:
-    def __init__(self,x,y, col):
-        self.x = 240+ x *180
-        self.y = 60+ y *120
+    """Piece is a super class of the chess pieces, x and y are the current board coordinates while colour is either black or white, (defined by an integer, 0 or 1)"""
+    
+    board = [[0 for i in range(8)] for j in range(8)]
+    
+    def __init__(self,x,y,col):
+        self.x = 220 + x * 120
+        self.y = 180 + y * 120
+
+        Piece.board[self.x][self.y] = self
         self.col = col
 
     def getCoords(self):
@@ -20,50 +26,43 @@ class Piece:
         #Will return the board position of the Piece
         return (self.x/180-160,self.y/180-160)
     
-    def drawCirc (self,screen,colour,r):
-        pygame.draw.circle(screen,colour,(self.x,self.y),r)
-    
     def possibleMoves(self):
         return
-
-class WhitePawn(Piece):
-    def possibleMoves(self):
-        if self.y == 2: #if its on the starting position
-            return [[0,1],[0,2]]
+    
+    def draw(self,screen,colour):
+        pygame.draw.circle(screen,colour,(self.getCoords()),50)
+    
+    def collision(self, other)->bool:
+        if not other.isinstance(Piece):
+            raise TypeError("Other is not a Piece")
         
-        return [[0,1]]
-    
-class BlackPawn(Piece):
-    def possibleMoves(self):
-        if self.y == 7: #if its on the starting position
-            return [[0,-1],[0,-2]]
-        return [[0,-1]]
+        if self.x == other.x and self.y == other.y:
+            return True
+        else:
+            return False
 
-class Knight(Piece):
-    def possibleMoves(self):
-        if self.y == 7: #if its on the starting position
-            return [[0,-1],[0,-2]]
-        return [[0,-1]]
-
-class Queen(Piece):
-    def possibleMoves(self):
-        if self.y == 7: #if its on the starting position
-            return [[0,-1],[0,-2]]
-        return [[0,-1]]
-    
-class King(Piece):
-    def possibleMoves(self):
-        if self.y == 7: #if its on the starting position
-            return [[0,-1],[0,-2]]
-        return [[0,-1]]
-
-class Rook(Piece):
-    def possibleMoves(self):
-        if self.y == 7: #if its on the starting position
-            return [[0,-1],[0,-2]]
-        return [[0,-1]]
+    def getTeam(self):
+        return self.col
 
 
+class Pawn(Piece):
+    def possibleMoves(self):
+        possMove
+
+        for i in range(2):
+            if not self.collision:
+                possMove += [0,i]
+            #else: if 
+
+
+        if self.getTeam(): #if on white team
+            if self.y == 2: #if its on the starting position
+                return [[0,1],[0,2]]
+            return [[0,1]]
+        else:
+            if self.y == 7: #if its on the starting position
+                return [[0,-1],[0,-2]]
+            return [[0,-1]]
     
         
 
