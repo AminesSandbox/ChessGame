@@ -1,5 +1,5 @@
 import pygame
-from testfile import Pawn
+from chesspiece import Pawn
 
 #CONSTANTS
 CHESSGREEN = [155,205,155]
