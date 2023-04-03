@@ -1,4 +1,5 @@
 import pygame
+import chesspiece
 
 #CONSTANTS
 CHESSGREEN = [155,205,155]
@@ -7,20 +8,10 @@ CHESSBROWN = [139,115,85]
 CHESSGRAY = [128,128,128]
 CHESSCYAN = [0,238,238]
 BLACK = [0,0,0]
+
 screenLength = 1280
 screenWidth = 960
-
-#CLASSES
-class Pawn:
-    def __init__(self,x,y, col):
-        self.x = 220+ x *120
-        self.y = 180+ y *120
-        self.col = col
-
-    def draw(self):
-        drawCircle(self.col,self.x,self.y,40)
     
-
 #METHODS
 def drawSquare (c,x,y,w,o):
     pygame.draw.rect(screen,c,(x,y,w,w),o)
@@ -53,8 +44,8 @@ screen.fill(CHESSBROWN)
 
 drawBoard()
 
-topPawns = [Pawn(x, 0, CHESSCYAN) for x in range(8)]
-bottomPawns = [Pawn(x, 5, CHESSCYAN) for x in range(8)]
+topPawns = [chesspiece.Pawn(x, 0, CHESSCYAN) for x in range(8)]
+bottomPawns = [chesspiece.Pawn(x, 5, CHESSCYAN) for x in range(8)]
 
 for p in topPawns + bottomPawns:
     p.draw()
