@@ -8,7 +8,7 @@ class Piece:
     """Piece is a super class of the chess pieces, x and y are the current board coordinates while colour is either black or white, (defined by an integer, 0 or 1)"""
     
     board = [[None for i in range(BOARD_SIZE)] for j in range(BOARD_SIZE)] #coords go from 0,0 (top left) to 7,7 (bottom right) [y,x]
-    lastMove = [None,None] #The games's last move this is used to check en-passant (Can be updated in future if want to play/rewind games in sequential order -> Stack)
+    lastMove = [None, None,None] #The games's last move this is used to check en-passant (Can be updated in future if want to play/rewind games in sequential order -> Stack) [self,x,y]
     
     def __init__(self,x,y,col):
         self.x = x
@@ -54,6 +54,7 @@ class Piece:
     
         self.x += vec[0]
         self.y += vec[1]
+        Piece.lastMove = [self,vec[0],vec[1]] #Updates Last move
 
     def getBoardCoords(self):
         """Will return the board position of the Piece"""
@@ -105,25 +106,43 @@ class Pawn(Piece):
         if self.y == 1 or self.y == BOARD_SIZE-2:
             movementincrement = 2
 
-        if self.getTeam():
+        if self.getTeam(): #White piece
+            if self.y == 1:
+                movementincrement = 2
             for i in range(1,movementincrement+1): #First Pawn Move  
                 if 0 <= self.y + i < BOARD_SIZE:
                     if not self.collision([0,i]):
                         self.possMove.append([0,i])
             
-            if 0 <= self.y + 1 < BOARD_SIZE and 0 <= self.x + 1 < BOARD_SIZE and Piece.board[self.y+1][self.x+1].getTeam() != self.getTeam(): #for diagonal eating
+            if Piece.board[self.y][self.x+1]!= None and 0 <= self.y + 1 < BOARD_SIZE and 0 <= self.x + 1 < BOARD_SIZE and Piece.board[self.y][self.x+1].getTeam() != self.getTeam(): #for diagonal eating
                     self.possMove.append([1,1])
-        else:
+            
+            if Piece.board[self.y][self.x+1]!= None and isinstance(Piece.board[self.y][self.x+1], Pawn): #En-Passant
+                if Piece.lastMove == [Piece.board[self.y][self.x+1],0,2]: #Check that pawn's last move is moving 2 squares up
+                    self.possMove.append([1,1])
+
+            if Piece.board[self.y][self.x-1]!= None and isinstance(Piece.board[self.y][self.x-1], Pawn): #En-Passant
+                if Piece.lastMove == [Piece.board[self.y][self.x-1],0,2]: #Check that pawn's last move is moving 2 squares up
+                    self.possMove.append([-1,1])
+
+        else: #Black Piece
+            if self.y == BOARD_SIZE-2: 
+                movementincrement = 2
+
             for i in range(1,movementincrement+1): #First Pawn Move  
-                if 0 <= self.y + i < BOARD_SIZE:
+                if 0 <= self.y - i < BOARD_SIZE:
                     if not self.collision([0,-i]):
                         self.possMove.append([0,-i])
             
-            if 0 <= self.y - 1 < BOARD_SIZE and 0 <= self.x - 1 < BOARD_SIZE and Piece.board[self.y-1][self.x-1].getTeam() != self.getTeam(): #for diagonal eating
+            if Piece.board[self.y][self.x+1]!= None and 0 <= self.y - 1 < BOARD_SIZE and 0 <= self.x - 1 < BOARD_SIZE and Piece.board[self.y-1][self.x-1].getTeam() != self.getTeam(): #for diagonal eating
                     self.possMove.append([-1,-1])
             
-            if Piece.board[self.y][self.x+1]!= None and Piece.board[self.y][self.x+1].isinstance(Pawn): #En-Passant
-                if Piece.board[self.y][self.x+1].getTeam() != 1 and Piece.board[self.y][self.x+1].prevMove == [0,2]:
+            if Piece.board[self.y][self.x+1]!= None and isinstance(Piece.board[self.y][self.x+1], Pawn): #En-Passant
+                if Piece.lastMove == [Piece.board[self.y][self.x+1],0,2]: #Check that pawn's last move is moving 2 squares up
+                    self.possMove.append([1,-1])
+
+            if Piece.board[self.y][self.x-1]!= None and isinstance(Piece.board[self.y][self.x-1], Pawn): #En-Passant
+                if Piece.lastMove == [Piece.board[self.y][self.x-1],0,2]: #Check that pawn's last move is moving 2 squares up
                     self.possMove.append([-1,-1])
 
         return self.possMove
@@ -131,23 +150,30 @@ class Pawn(Piece):
 
 
 if __name__ == '__main__':
-    print("Im doing something in TestFile")
+    print("\nIm doing something in TestFile")
     pList = list()
 #    for i in range(8):
  #       pList.append(Pawn(i,7,1)) # 8 white pawns
   #  for i in range(8):
    #     pList.append(Pawn(i,1,0)) # 8 black pawns
-    pList.append(Pawn(1,7,0)) # 8 white pawns
-    pList.append(Pawn(0,6,1)) # 8 white pawns
 
-    for row in Piece.board:
-        print(row)
-        
-    pList[0].setCoords(0,0)
+    pList.append(Pawn(1,6,0)) # black pawn
+    pList.append(Pawn(0,4,1)) # white pawn
+    
     print("")
 
     for row in Piece.board:
         print(row)
-    
+
+    print("")
     print(pList[0].possibleMoves())
+    print(pList[0].movePiece([0,-2]))
+    print(pList[1].possibleMoves())
+    print(pList[1].movePiece([1,1]))
+    print(pList[1].possibleMoves())
+
+    print("")
+
+    for row in Piece.board:
+        print(row)
 
