@@ -1,5 +1,4 @@
 import pygame
-from chesspiece import Pawn
 
 #CONSTANTS
 CHESSGREEN = [155,205,155]
@@ -8,12 +7,25 @@ CHESSBROWN = [139,115,85]
 CHESSGRAY = [128,128,128]
 CHESSCYAN = [0,238,238]
 BLACK = [0,0,0]
+screenLength = 1280
+screenWidth = 960
 
-#DRAWING METHODS
+#CLASSES
+class Pawn:
+    def __init__(self,x,y, col):
+        self.x = 220+ x *120
+        self.y = 180+ y *120
+        self.col = col
+
+    def draw(self):
+        drawCircle(self.col,self.x,self.y,40)
+    
+
+#METHODS
 def drawSquare (c,x,y,w,o):
     pygame.draw.rect(screen,c,(x,y,w,w),o)
 
-def drawCirc (colour,x,y,r):
+def drawCircle (colour,x,y,r):
     pygame.draw.circle(screen,colour,(x,y),r)
 
 def drawBoard(): 
@@ -33,14 +45,19 @@ def drawBoard():
 #MAIN SCRIPT
 pygame.init() # initialize game
 
-screen = pygame.display.set_mode((1280, 960)) #setting length and width
+screen = pygame.display.set_mode((screenLength, screenWidth)) #setting length and width
 clock = pygame.time.Clock()
 running = True
 
-rows, cols = (5, 5)
-boardMatrix = [[0] * cols] * rows
+screen.fill(CHESSBROWN)
 
-pawn1 = Pawn(00,00,CHESSCYAN)
+drawBoard()
+
+topPawns = [Pawn(x, 0, CHESSCYAN) for x in range(8)]
+bottomPawns = [Pawn(x, 5, CHESSCYAN) for x in range(8)]
+
+for p in topPawns + bottomPawns:
+    p.draw()
 
 while running:
     # poll for events
@@ -51,12 +68,8 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     
-    screen.fill(CHESSBROWN)
-    drawBoard()
-
     # RENDER YOUR GAME HERE
-    drawCirc(CHESSCYAN,pawn1.getCoords()[0],pawn1.getCoords()[1],10)
-    
+
     # flip() the display to put your work on screen
     pygame.display.flip()
 
